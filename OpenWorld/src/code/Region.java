@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class Region {
 	Climate climate;
-	Politics politics;
-	Law law;
+	Organization government;
 	ArrayList<Flora> flora;
 	ArrayList<Fauna> fauna;
 	ArrayList<Dungeon> dungeons;
@@ -19,20 +18,6 @@ public class Region {
 	}
 	
 	class Flora {
-		
-	}
-	
-	class Fauna {
-		
-	}
-	
-	class Politics {
-		String type;
-		boolean isContested;
-		//leader
-	}
-	
-	class Law {
 		
 	}
 }
