@@ -1,0 +1,69 @@
+{
+	"system": "Dungeons and Dragons 5th Edition",
+	"license": "Open Gaming Liense v1.0a",
+	
+	"globalattributerange": [0,0],
+	"attributes": [
+		{ 
+			"name": "Strength", 
+			"range": [3,18] 
+		},
+		{ 
+			"name": "Dexterity", 
+			"range": [3,18] 
+		},
+		{ 
+			"name": "Constitution",
+			"range": [3,18] 
+		},
+		{ 
+			"name": "Intelligence",
+			"range": [3,18] 
+		},
+		{ 
+			"name": "Wisdom",
+			"range": [3,18] 
+		},
+		{ 
+			"name": "Charisma",
+			"range": [3,18] 
+		},
+		{
+			"name": "Armor Class",
+			"range": null
+		},
+		{
+			"name": "Hit Points",
+			"range": [0,0]
+		},
+		{
+			"name": "Speed",
+			"range": [0,0]
+		},
+		{
+			"name": "Speed (fly)",
+			"range": [0,0]
+		},
+		{
+			"name": "Damage Resistences"
+		},
+		{
+			"name": "Condition Immunities"
+		},
+		{
+			"name": "Senses"
+		},
+		{
+			"name": "Lanugages"
+		},
+		{
+			"name": "Challenge"
+		},
+		{
+			"name": "Properties"
+		},
+		{
+			"name": "Actions"
+		}
+		]
+}
