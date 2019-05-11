@@ -44,6 +44,17 @@ typedef struct language {
 
 } Language;
 
+/* Create new, completely random language */
+Language randomLanguage();
+
+/* Create new language from JSON file */
+//TODO: settle on JSON parsing format!
+Language randomLanguage();
+
+/* Check for mutual inteligibility */
+int isMutuallyIntelligibleWith(char *other_language);
+
+/* GETTERS: */
 /* Get a word of a certain type */
 char *getWord(int type);
 
@@ -53,5 +64,17 @@ char *getWord(char *literal);
 /* Get a sentence translation */
 char *getSentence(char *literal);
 
-/* Check for mutual inteligibility */
-int isMutuallyIntelligibleWith(char *other_language);
+/* SETTERS: */
+int changeName(Language language, char *new_name);
+
+int changeMaxSyllablesPerWord(Language language, int syllables);
+
+int changeSpacesInSentences(Language language, int spaces);
+
+int changeConjugationPerson(Language language, int person_conjugation);
+
+int changeConjugationTense(Language language, int tense_conjugation);
+
+int changeWhereConjugationMarkerGoes(Language language, int where_conjugation_marker_goes);
+
+int changeHasFormalRegister(Language language, int has_formal_register);
