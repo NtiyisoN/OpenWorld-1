@@ -1,3 +1,8 @@
+/* OpenWorld 1.0 
+ * language.h  
+ * created 2019-05-10 by Blake Cooper
+ */
+
 /* Word order definitions (subject (S), object (O) and verb (V)) */
 #define SOV 0
 #define SVO 1
@@ -7,8 +12,11 @@
 #define OSV 5
 #define NO_ORDER 6
 
-/* Default array size for initializing structs */
-#define DEFAULT_ARRAY_SIZE 16
+/* Default array size for language name, number of syllables, number of word initial and final syllables (any elements not used will be 0) */
+#define NAME_SIZE 16
+#define NUMBER_SYLLABLES 32
+#define NUMBER_SYLLABLES_INITIAL 12
+#define NUMBER_SYLLABLES_FINAL 12
 
 /* Using a boolean to determine whether markers go before or after words */
 #define BEFORE 0
@@ -23,11 +31,11 @@
 #define PREPOSITION 5
 
 typedef struct language {
-	char name[DEFAULT_ARRAY_SIZE];
+	char name[NAME_SIZE];
 	
-	char syllables[DEFAULT_ARRAY_SIZE * 2];
-	char syllables_wordinitial[DEFAULT_ARRAY_SIZE];
-	char syllables_wordfinal[DEFAULT_ARRAY_SIZE];
+	char syllables[NUMBER_SYLLABLES];
+	char syllables_wordinitial[NUMBER_SYLLABLES_INITIAL];
+	char syllables_wordfinal[NUMBER_SYLLABLES_FINAL];
 	int max_syllables_per_word;
 
 	int word_order;
@@ -35,7 +43,7 @@ typedef struct language {
 
 	int conjugation_person;
 	int conjugation_tense;
-	int conjugation_marker_goes
+	int conjugation_marker_goes;
 	char *markers_person[3];
 	char *markers_tense[3];
 
@@ -47,22 +55,26 @@ typedef struct language {
 /* Create new, completely random language */
 Language randomLanguage();
 
-/* Create new language from JSON file */
-//TODO: settle on JSON parsing format!
-Language randomLanguage();
+/* Create new language with a specific name */
+Language makeLanguageCalled(char *name);
+
+/* Create new language from JSON(?) file */
+Language makeLanguageFromFile();
+
+/* Method for producing (random) syllables */
+char *getSyllable(char *syllable);
 
 /* Check for mutual inteligibility */
 int isMutuallyIntelligibleWith(char *other_language);
+
 
 /* GETTERS: */
 /* Get a word of a certain type */
 char *getWord(int type);
 
-/* Get a translation of a word */
-char *getWord(char *literal);
+/* Get a translation of a word or phrase*/
+char *getTranslation(char *literal);
 
-/* Get a sentence translation */
-char *getSentence(char *literal);
 
 /* SETTERS: */
 int changeName(Language language, char *new_name);
