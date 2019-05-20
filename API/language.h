@@ -33,21 +33,37 @@
 typedef struct language {
 	char name[NAME_SIZE];
 	
-	char syllables[NUMBER_SYLLABLES];
-	char syllables_wordinitial[NUMBER_SYLLABLES_INITIAL];
-	char syllables_wordfinal[NUMBER_SYLLABLES_FINAL];
+	/* How long is the longest word, in terms of syllables? */
 	int max_syllables_per_word;
+	
+	/* Store all the possible syllables that can occur in the beginning, midle and end of words */
+	char *syllables[NUMBER_SYLLABLES];
+	char *syllables_wordinitial[NUMBER_SYLLABLES_INITIAL];
+	char *syllables_wordfinal[NUMBER_SYLLABLES_FINAL];
 
+	/* Sentence-level grammar: what order do words come in?*/
 	int word_order;
-	int spaces;
 
+	/* Grammatical markers for person, tense etc. (boolean)*/
+	int spaces_between_markers;
 	int conjugation_person;
 	int conjugation_tense;
+	int declension;
+	int plural;
+	int formal;
+
+	/* Should grammatical markers go before (0) or after (1) the word they modify? */
 	int conjugation_marker_goes;
+	int declension_marker_goes;
+	int formal_marker_goes;
+
+	/* Person markers (0 = first, 1 = second, 3 = third) */
+	/* Tense markers (0 = past, 1 = present, 2 = future) */
+	/* Declension markers (0 = subject, 1 = object) */
 	char *markers_person[3];
 	char *markers_tense[3];
-
-	int formal;
+	char *markers_declension[2];
+	char *plural_marker;
 	char *formal_marker;
 
 } Language;
@@ -61,8 +77,11 @@ Language makeLanguageCalled(char *name);
 /* Create new language from JSON(?) file */
 Language makeLanguageFromFile();
 
-/* Method for producing (random) syllables */
+/* Function for producing (random) syllables */
 char *getSyllable();
+
+/* Similar to the getSyllable() function, this returns a short syllable (either a vowel or a single consonant onset with a vowel) to be used as a grammatical marker*/
+char *getMarker();
 
 /* Check for mutual inteligibility */
 int isMutuallyIntelligibleWith(char *other_language);
