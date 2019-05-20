@@ -62,7 +62,7 @@ Language makeLanguageCalled(char *name);
 Language makeLanguageFromFile();
 
 /* Method for producing (random) syllables */
-char *getSyllable(char *syllable);
+char *getSyllable();
 
 /* Check for mutual inteligibility */
 int isMutuallyIntelligibleWith(char *other_language);
