@@ -74,8 +74,14 @@ Language randomLanguage();
 /* Create new language with a specific name */
 Language makeLanguageCalled(char *name);
 
-/* Create new language from JSON(?) file */
-Language makeLanguageFromFile();
+/* Load a language from the database */
+Language loadLanguage();
+
+/* Save a language to the database */
+void saveLanguage();
+
+/* Free allocated Language structs */
+void freeLanguage(Language *lang);
 
 /* Function for producing (random) syllables */
 char *getSyllable();
@@ -89,23 +95,23 @@ int isMutuallyIntelligibleWith(char *other_language);
 
 /* GETTERS: */
 /* Get a word of a certain type */
-char *getWord(int type);
+char *getWordOfType(int type);
 
 /* Get a translation of a word or phrase*/
 char *getTranslation(char *literal);
 
 
 /* SETTERS: */
-int changeName(Language language, char *new_name);
+int changeName(Language *language, char *new_name);
 
-int changeMaxSyllablesPerWord(Language language, int syllables);
+int changeMaxSyllablesPerWord(Language *lang, unsigned int syllables);
 
-int changeSpacesInSentences(Language language, int spaces);
+int changeSpacesInSentences(Language *lang, unsigned int spaces);
 
-int changeConjugationPerson(Language language, int person_conjugation);
+int changeConjugationPerson(Language *lang, unsigned int person_conjugation);
 
-int changeConjugationTense(Language language, int tense_conjugation);
+int changeConjugationTense(Language *lang, unsigned int tense_conjugation);
 
-int changeWhereConjugationMarkerGoes(Language language, int where_conjugation_marker_goes);
+int changeWhereConjugationMarkerGoes(Language *lang, unsigned int where_conjugation_marker_goes);
 
-int changeHasFormalRegister(Language language, int has_formal_register);
+int changeHasFormalRegister(Language *lang, unsigned int has_formal_register);
