@@ -19,31 +19,6 @@ Language randomLanguage() {
 
 	new_lang->max_syllables_per_word = rand() % 5 + 5;
 
-	new_lang->spaces_between_markers = rand() % 2;
-	new_lang->conjugation_person = rand() % 2;
-	new_lang->conjugation_tense = rand() % 2;
-	new_lang->declension = rand() % 2;
-	new_lang->plural = rand() % 2;
-	new_lang->formal = rand() % 2;
-
-	new_lang->conjugation_marker_goes = rand() % 2;
-	new_lang->declension_marker_goes = rand() % 2;
-	new_lang->formal_marker_goes = rand() % 2;
-
-	new_lang->markers_person[0] = getMarker();
-	new_lang->markers_person[1] = getMarker();
-	new_lang->markers_person[2] = getMarker();
-
-	new_lang->markers_tense[0] = getMarker();
-	new_lang->markers_tense[1] = getMarker();
-	new_lang->markers_tense[2] = getMarker();
-
-	new_lang->markers_declension[0] = getMarker();
-	new_lang->markers_declension[1] = getMarker();
-
-	new_lang->plural_marker = getMarker();
-	new_lang->formal_marker = getMarker();
-
 	for (int i = 0; i < NUMBER_SYLLABLES; i++) {
 		new_lang->syllables[i] = getSyllable();
 	}
@@ -56,25 +31,9 @@ Language randomLanguage() {
 		new_lang->syllables_wordfinal[i] = new_lang->syllables[rand() % NUMBER_SYLLABLES];
 	}
 
-	new_lang->word_order = rand() % 7;
+	new_lang->name = makeWord(new_lang);
 
-	int syllables_in_name = (rand() % new_lang->max_syllables_per_word) + 1;
-
-	char *name_cursor = new_lang->name;
-	int cursor_count = 0;
-
-	for (int i = 0; i < syllables_in_name; i++) {
-		if (cursor_count < NAME_SIZE) {
-			name_cursor = getSyllable();
-			while (*name_cursor != '\0') {
-				name_cursor++;
-				cursor_count++;
-				if (cursor_count == NAME_SIZE) {
-					break;
-				}
-			}
-		}
-	}
+	Dictionary *dictionary[HASHSIZE];
 }
 
 Language makeLanguageCalled(char *name) {
@@ -86,10 +45,12 @@ Language makeLanguageCalled(char *name) {
 
 Language loadLanguage() {
 	//TODO: pending database setup
+	//TODO: see below
 }
 
 void saveLanguage(Language *lang) {
 	//TODO: pending database setup
+	//TODO: ...actually, consider using hashtables to start from, which can then be loaded into and retrieved from the database
 }
 
 void freeLanguage(Language *lang) {
@@ -169,16 +130,58 @@ char *getMarker() {
 	return marker;
 }
 
+char *makeWord(Language *lang) {
+	int syllables_in_word = (rand() % new_lang->max_syllables_per_word) + 1;
+
+	char *new_word = calloc(WORD_SIZE, sizeof(char));
+	int cursor_count = 0;
+
+	for (int i = 0; i < syllables_in_word; i++) {
+		if (cursor_count < WORD_SIZE) {
+			new_word = getSyllable();
+			while (*new_word != '\0') {
+				new_word++;
+				cursor_count++;
+				if (cursor_count == WORD_SIZE) {
+					break;
+				}
+			}
+		}
+	}
+
+	return new_word;
+}
+
 int isMutuallyIntelligibleWith(char *other_language) {
 	//TODO: Figure out how to calculate this
 }
 
-char *getWordOfType(int type) {
-	//TODO: Figure out how to store dictionary 
-}
+char *getTranslation(Language *lang, char *literal) {
+	//TODO: Allow for looking up words to see if they already exist (ie., load literal word into fixed space, use it for dictionary lookup
+	char *translation;
+	int non_whitespace = 0;
 
-char *getTranslation(char *literal) {
-	//TODO: Figure out dictionary issue
+	char *cursor_literal = literal;
+	char *cursor_translation = translation;
+	
+	for (cursor; cursor != '\0'; cursor++) {
+		if (non_whitespace && *cursor = ' ') {
+			cursor_translation = makeWord(lang);
+			
+			while (*cursor_translation != '\0') {
+				cursor_translation++;
+			}
+			
+			if (lang->spaces) {
+				*cursor_translation = ' ';
+				cursor_translation++;
+			}
+		} else {
+			non_whitespace = 1;
+		}
+	}
+
+	return translation;
 }
 
 int changeName(Language *lang, char *new_name) {
@@ -187,8 +190,8 @@ int changeName(Language *lang, char *new_name) {
 		count++;
 	}
 
-	if (count > NAME_SIZE) {
-		fprintf(stderr, "%s", "Suggested name is too long! Name must be under %d characters", NAME_SIZE);
+	if (count > WORD_SIZE) {
+		fprintf(stderr, "%s", "Suggested name is too long! Name must be under %d characters", WORD_SIZE);
 		return -1;
 	} else {
 		lang->name = new_name;
