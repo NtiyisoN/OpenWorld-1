@@ -14,7 +14,7 @@ static char *consonants[] = {
 		"v","w","x","y","z"
 	};
 
-Language randomLanguage() {
+Language makeRandomLanguage() {
 	Language new_lang = malloc(sizeof(Language));
 
 	new_lang->max_syllables_per_word = rand() % 5 + 5;
@@ -37,7 +37,7 @@ Language randomLanguage() {
 }
 
 Language makeLanguageCalled(char *name) {
-	Language new_lang = randomLanguage();
+	Language new_lang = makeRandomLanguage();
 	new_lang->name = name;
 
 	return new_lang;
@@ -152,16 +152,21 @@ char *makeWord(Language *lang) {
 	return new_word;
 }
 
+char *getNameOfLanguage(Language *lang) {
+	return lang->name;
+}
+
 int isMutuallyIntelligibleWith(char *other_language) {
 	//TODO: Figure out how to calculate this
 }
 
-char *getTranslation(Language *lang, char *literal) {
-	//TODO: Allow for looking up words to see if they already exist (ie., load literal word into fixed space, use it for dictionary lookup
+char *translateInto(Language *lang, char *source) {
+	//TODO: Allow for looking up words to see if they already exist (ie., load source word into fixed space, use it for dictionary lookup
+	//TODO: Strip punctuation, ignore case (might need pareser lib)
 	char *translation;
 	int non_whitespace = 0;
 
-	char *cursor_literal = literal;
+	char *cursor_source = source;
 	char *cursor_translation = translation;
 	
 	for (cursor; cursor != '\0'; cursor++) {
@@ -215,46 +220,6 @@ int changeSpacesInSentences(Language *lang, unsigned int spaces) {
 		return -1;
 	} else {
 		lang->spaces = spaces;
-		return 0;
-	}
-}
-
-int changeConjugationPerson(Language *lang, unsigned int person_conjugation) {
-	if (person_conjugation > 1) {
-		fprintf(stderr, "%s", "A language can either conjugate for person (1) or not (0).");
-		return -1;
-	} else {
-		lang->conjugation_person = person_conjugation;
-		return 0;
-	}
-}
-
-int changeConjugationTense(Language *lang, unsigned int tense_conjugation) {
-	if (tense_conjugation > 1) {
-		fprintf(stderr, "%s", "A language can either conjugate for tense (1) or not (0).");
-		return -1;
-	} else {
-		lang->conjugation_tense = tense_conjugation;
-		return 0;
-	}
-}
-
-int changeWhereConjugationMarkerGoes(Language *lang, unsigned int where_conjugation_marker_goes)
-	if (where_conjugation_marker_goes > 1) {
-		fprintf(stderr, "%s", "A language can either put the conjugation marker at the beginning (0) or end (1) of a word.");
-		return -1;
-	} else {
-		lang->conjugatiion_marker_goes = where_conjugation_marker_goes;
-		return 0;
-	}
-}
-
-int changeHasFormalRegister(Language *lang, unsigned int has_formal_register)
-	if (has_formal_register > 1) {
-		fprintf(stderr, "%s", "A language either has a formal register (1) or not (0).");
-		return -1;
-	} else {
-		lang->formal = has_formal_register;
 		return 0;
 	}
 }
