@@ -1,6 +1,10 @@
 /* OpenWorld 1.0 
- * language.h  
- * created 2019-05-10 by Blake Cooper
+ * by Blake Cooper
+ *
+ * language.h 
+ * created:	2019-05-10 
+ * updated:	2019-05-24 
+ * 
  */
 
 #include "Dictionary.c"

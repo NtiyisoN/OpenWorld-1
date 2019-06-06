@@ -1,6 +1,10 @@
 /* OpenWorld 1.0 
- * language.c  
- * created 2019-05-10 by Blake Cooper
+ * by Blake Cooper
+ *
+ * language.c 
+ * created:	2019-05-10 
+ * updated:	2019-06-05 
+ * 
  */
 
 #include <stdlib.h>
