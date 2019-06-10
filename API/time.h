@@ -3,7 +3,7 @@
  *
  * time.h 
  * created:	2019-06-06 
- * updated:	2019-06-06 
+ * updated:	2019-06-10 
  * 
  */
 
@@ -14,14 +14,14 @@
 /*Definitions for units of time */
 #define NUMBER_UNITS 8
 
-#define ERA 0
-#define YEAR 1
-#define MONTH 2
-#define DAY 3
-#define HOUR 4
-#define MINUTE 5
-#define SECOND 6
-#define MILLISECOND 7
+#define ERA 7
+#define YEAR 6
+#define MONTH 5
+#define DAY 4
+#define HOUR 3
+#define MINUTE 2
+#define SECOND 1
+#define MILLISECOND 0
 
 /*Definitions for time formats */
 #define DD 0
@@ -30,7 +30,7 @@
 #define MNTH 3
 #define ERA 4
 #define HH 5
-#define MM 6
+#define MT 6
 #define SS 7
 #define TIME 8
 #define DATE 9
@@ -40,27 +40,36 @@ typedef struct unit {
 	char name[NAME_SIZE];
 	short hasName;
 
-	int count;
+	//Dichotomizing units of time here by "count" units (like seconds and minutes, which typically don't have names, and "named" units, like months, which are referred to as such. Years are both count and named units.
 	short hasCount;
-	
+	long long count;
+
+	//next and previous units in the chain (so, for example, link this month to the next and previous months.
 	Unit *next;
 	Unit *prev;
 	
+	//Number of these units to make up the next highest unit
 	int units_in_higher_unit;
+
+	//Count in ms
+	int count_in_ms;
 
 } Unit;
 
 //Calendar array (Unit pointers)
 typedef struct calendar{
 	Unit *calendar[NUMBER_UNITS];
-	Unit current_datetime[NUMBER_UNITS];
+	long long current_datetime;
 } Calendar;
 
 //Load a calendar from file
-Calendar loadCalendarFromFile(char[FILENAME_MAX_LENGTH]);
+Calendar *makeCalendarFromFile(char[FILENAME_MAX_LENGTH]);
 
 //...or, create a random calendar.
-Calendar loadRandomCalendar();
+Calendar *makeRandomCalendar();
+
+//Free a calendar.
+void destroyCalendar(Calendar cal);
 
 //Advance a unit of time
 void advance (Calendar cal, int unit);
@@ -68,25 +77,17 @@ void advance (Calendar cal, int unit);
 //Rewind a unit of time
 void rewind (Calendar cal, int unit);
 
-//Set the current time
-char *setDateTime (Calendar cal, int format, char *date_time);
-
 //Set the current time randomly
 void setDateTimeRandomly (Calendar cal);
 
 //Return the current time as a written statement
-char *getDateTime (char *format);
+char *getDateTime (const Calendar cal, char *format);
 
 //Return the current time as an int counter in seconds from 
-long long *getDateTimeAsCounter ();
+long long *getDateTimeAsCounter (Calanedar cal);
 
 //Boolean: is the current time before the specified time?
-short dateTimeIsBefore (char *date_time);
+short dateTimeIsBefore (Calendar cal, long long datetime);
 
 //Boolean: is the current time after the specified time?
-short dateTimeIsAfter (char *date_time);
-
-typedef long long TIME_COUNT;
-
-//Convert written time format to counter
-TIME_COUNT parseDateTime(Calendar cal);
+short dateTimeIsAfter (Calendar cal, long long datetime);
