@@ -3,7 +3,7 @@
  *
  * time.h 
  * created:	2019-06-06 
- * updated:	2019-06-10 
+ * updated:	2019-06-11 
  * 
  */
 
@@ -27,13 +27,14 @@
 #define DD 0
 #define MM 1
 #define YYYY 2
-#define MNTH 3
-#define ERA 4
-#define HH 5
-#define MT 6
-#define SS 7
-#define TIME 8
-#define DATE 9
+#define YEAR 3
+#define MNTH 4
+#define ERA 5
+#define HH 6
+#define MT 7
+#define SS 8
+#define TIME 9
+#define DATE 10
 
 //Struct for a unit of time
 typedef struct unit {

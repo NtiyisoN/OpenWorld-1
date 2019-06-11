@@ -3,7 +3,7 @@
  *
  * time.c 
  * created:	2019-06-06 
- * updated:	2019-06-10 
+ * updated:	2019-06-11 
  * 
  */
 
@@ -90,7 +90,7 @@ Calendar *makeRandomCalendar() {
 			cal->calendar[6]->units_in_higher_unit;
 	cal->calendar[7]->units_in_higher_unit = 0;
 	
-	//Now, link the named units together in a string
+	//Now, link the named units together in an array
 	for (int i = MONTH; i < NUMBER_UNITS; i++) {
 		int count = 1;
 		Unit previous_unit = cal->calendar[i];
@@ -145,7 +145,7 @@ void setDateTimeRandomly (Calendar cal) {
 }
 
 char *getDateTime (const Calendar cal, char *format) {
-	char dateTime[MAX_CHARS_FOR_DESCRIPTION];
+	char dateTime[MAX_CHARS_FOR_DESCRIPTION] = calloc(MAX_CHARS_FOR_DESCRIPTION, sizeof(char));
 	int units[NUMBER_UNITS];
 	
 	long long remaining = cal->current_datetime;
@@ -159,122 +159,63 @@ char *getDateTime (const Calendar cal, char *format) {
 	}
 	
 	//parse format
-	char *write_cursor = dateTime;
-	char *read_cursor = format;
+	char *format_cursor = format;
 
-    while (read_cursor != '\0') {
-		switch (*read_cursor) {
-				case 'D':
-					char *next = read_cursor + 1;
-					if (*next == 'A') {
-						next++;
-						if (*next == 'T') {
-							next++;
-							if (*next == 'E') {
-								//TODO: return date string
-								break;
-							}
-						}
-					} else if (*next == 'D') {
-						//TODO: return day
-						break;
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
+	while (*format_cursor != '\0') {
+		char substr_4[5];
+		memcpy(substr_4, format_cursor, 4);
+		substr_4[4] = '\0';
+
+		if (strcmp(substr_4, 'DATE') == 0) {
+			sprintf(datetime, "%d-%d-%d", units[YEAR], units[DAY], units[MONTH]); 
+			format_cursor = format_cursor + 4;
+		} else if (strcmp(substr_4, 'MNTH')) {
+			sprintf(datetime, "%s", cal->calendar[MONTH][units[MONTH]]->NAME);
+			format_cursor = format_cursor + 4;
+		} else if (strcmp(substr_4, 'TIME')) {
+			sprintf(datetime, "%d:%d", units[HOUR], units[MINUTE];
+			format_cursor = format_cursor + 4;
+		} else if (strcmp(substr_4, 'YYYY')) {
+			sprintf(datetime, "%d", units[YEAR]);
+			format_cursor = format_cursor + 4;
+		} else if (strcmp(substr_4, 'YEAR')) {
+			sprintf(datetime, "%s", cal->calendar[YEAR][units[YEAR]]->name;
+			format_cursor = format_cursor + 4;
+		} else {
+			char substr_3[4];
+			memcpy(substr_3, substr_4, 3);
+			substr_3[3] = '\0';
+
+			if (strcmp(substr_3, 'ERA')) {
+				sprintf(datetime, "%s", cal->calendar[ERA][units[ERA]]->name);
+				format_cursor = format_cursor + 3;
+			} else {
+				char substr_2[3];
+				memcpy(substr_2, substr_3, 2);
+				substr_2[2] = '\0';
+
+				if (strcmp(substr_2, 'DD')) {
+					sprintf(datetime, "%d", units[DAY]);
+					format_cursor = format_cursor + 2;
+				} else if (strcmp(substr_2, 'HH')) {
+					sprintf(datetime, "%d", units[HOUR]);
+					format_cursor = format_cursor + 2;
+				} else if (strcmp(substr_2, 'MM')) {
+					sprintf(datetime, "%d", units[DAY]);
+					format_cursor = format_cursor + 2;
+				} else if (strcmp(substr_2, 'MT')) {
+					sprintf(datetime, "%d", units[MONTH]); 
+					format_cursor = format_cursor + 2;
+				} else if (strcmp(substr_2, 'SS')) {
+					sprintf(datetime, "%d", units[DAY]);
+					format_cursor = format_cursor + 2;
+				} else {
+					printf(datetime, *format_cursor);
+					format_cursor++;
 					break;
-				case 'E':
-					char *next = read_cursor + 1;
-					if (*next == 'R') {
-						next++;
-						if (*next == 'A') {
-							//TODO: return era name
-							break;
-						}
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
-					break;
-				case 'H':
-					char *next = read_cursor + 1;
-					if (*next == 'H') {
-						//TODO: return hour number
-						break;
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
-					break;
-				case 'M':
-					char *next = read_cursor + 1;
-					if (*next == 'M') {
-						//TODO: return month number
-						break;
-					} else if (*next == 'N') {
-						next++;
-						if (*next == 'T') {
-							next++;
-							if (*next == 'H') {
-								//TODO: return month name
-								break;
-							}
-						}
-					} else if (*next == 'T') {
-						//TODO: return minute
-						break;
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
-					break;
-				case 'S':
-					char *next = read_cursor + 1;
-					if (*next == 'S') {
-						//TODO: return seconds number
-						break;
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
-					break;
-				case 'T':
-					char *next = read_cursor + 1;
-					if (*next == 'I') {
-						next++;
-						if (*next == 'M') {
-							next++;
-							if (*next == 'E') {
-								//TODO: return time string
-								break;
-							}
-						}
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
-					break;
-				case 'Y':
-					char *next = read_cursor + 1;
-					if (*next == 'Y') {
-						next++;
-						if (*next == 'Y') {
-							next++;
-							if (*next == 'Y') {
-								//TODO: return year number
-								break;
-							}
-						}
-					} else {
-						*write_cursor = *read_cursor;
-						break;
-					}
-					break;
-				default:
-						*write_cursor = *read_cursor;
+				}
+			}
 		}
-
-		read_cursor++;
 	}
 
 	return dateTime;
