@@ -134,19 +134,19 @@ char *getMarker() {
 	return marker;
 }
 
-char *makeWord(Language *lang, int max_word_size) {
+char *makeWord(Language *lang) {
 	int syllables_in_word = (rand() % new_lang->max_syllables_per_word) + 1;
 
-	char *new_word = calloc(max_word_size, sizeof(char));
+	char *new_word = calloc(MAX_CHARS_IN_NAME, sizeof(char));
 	int cursor_count = 0;
 
 	for (int i = 0; i < syllables_in_word; i++) {
-		if (cursor_count < max_word_size) {
+		if (cursor_count < MAX_CHARS_IN_NAME) {
 			new_word = getSyllable();
 			while (*new_word != '\0') {
 				new_word++;
 				cursor_count++;
-				if (cursor_count == max_word_size) {
+				if (cursor_count == MAX_CHARS_IN_NAME) {
 					break;
 				}
 			}

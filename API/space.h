@@ -37,7 +37,7 @@ typedef struct site {
 	bool is_governed;
 	Creature *governor;
 
-	bool interior_or_exterior;
+	bool exterior_or_interior;
 
 	Site *to_north;
 	Site *to_south;
@@ -50,7 +50,7 @@ typedef struct site {
 } Site;
 
 typedef struct map {
-	Site *of_site;
+	Site *of;
 	Site *capital;
 } map;
 
@@ -59,6 +59,8 @@ typedef struct map {
 Site *makeSpaceFromFile(FILE filename[FILENAME_MAX_LENGTH]);
 
 Site *makeSpaceWithContext(OpenWorld world);
+
+/* Note: making Space randomly will generate an entire universe, world and series of locations all without owners or cultural attachment. This will work well for some general cases, but space is better made in context */
 
 Site *makeRandomSpace();
 
@@ -69,6 +71,14 @@ Site *makeSiteOfType(short type);
 void moveSiteTo(Site location);
 
 void situateSite(short direction, Site location);
+
+Site *moveNorthOf(Site location);
+
+Site *moveSouthOf(Site location);
+
+Site *moveEastOf(Site location);
+
+Site *moveWestOf(Site location);
 
 /* Getters: */
 char *getSiteName(const Site site);
