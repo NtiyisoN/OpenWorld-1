@@ -39,14 +39,12 @@ typedef struct site {
 
 	bool exterior_or_interior;
 
-	Site *to_north;
-	Site *to_south;
-	Site *to_east;
-	Site *to_west;
+	Site neighbor[4];
 
 	Map *location;
 	Map *map;
-	
+
+	Language *language;
 } Site;
 
 typedef struct map {

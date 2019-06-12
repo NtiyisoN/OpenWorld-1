@@ -23,7 +23,7 @@ Site *makeSpaceFromContext(World world) {
 Site *makeRandomSpace() {
 	Space *space = calloc(1, sizeof(Space));
 
-	Language lang = makeRandomLanguage();
+	space->language = makeRandomLanguage();
 
 	space->has_name = TRUE;
 	space->name = makeWord(lang);
@@ -61,18 +61,16 @@ Map *makeMap(Site *site) {
 	return map;
 }
 
-void fillSpace(Map *map, int sites_to_build) {
-	//TODO: finish this!	
+void fillSpace(Map *map) {
 	int maptype = map->of_site->type;
 	int total_sites;
 	Site *capital = calloc(1, sizeof(Site));
 
 	if (maptype == UNIVERSE) {
 		total_sites = GALAXIES_IN_UNIVERSE;
+		//capital here (and in other conditionals) must be FULLY fleshed out!)
 		capital->type = GALAXY;
 		capital->map = makeMap(capital);
-
-		fillSpace(capital);
 	} else if (maptype == GALAXY) {
 		total_sites = SYSTEMS_IN_GALAXY;
 	} else if (maptype == SYSTEM) {
@@ -90,10 +88,25 @@ void fillSpace(Map *map, int sites_to_build) {
 	} else {
 		total_sites = DEFAULT_NUMBER_SITES_ON_GENERIC_MAP;
 	}
+	
+	Site sitevisitor = capital;
+	
+	fillSpace(capital, total_sites);
+}
 
-	while (sites_to_build > 0) {
-		if (sites_to_build > 4) {
-		} else {
+void fillSpace(Site sitevisitor, int sites_remaining) {
+	
+	if (sites_remaining > 0) {
+		if (sitevisitor != NULL) {
+			int neighbors = (rand() % 4) + 1;
+			for (int i = 0; i < neighbors; i++) {
+				sitevisitor->neighbor[i] = calloc(1, sizeof(Site));
+				memcpy (sitevisitor->neighbor[i], sitevisitor, sizeof(Site));
+				sitevisitor->neighbor[i]->name = makeWord(sitevisitor->language);
+				fillSpace(sitevisitor->neighbor[i], (sites_remaining / neighbors));
+			}
+
 		}
+	} else {
 	}
 }	
