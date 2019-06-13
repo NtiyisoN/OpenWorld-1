@@ -3,7 +3,7 @@
  *
  * space.h 
  * created:	2019-06-11 
- * updated:	2019-06-11 
+ * updated:	2019-06-13 
  * 
  */
 
@@ -67,16 +67,6 @@ Site *makeRandomSite();
 Site *makeSiteOfType(short type);
 
 void moveSiteTo(Site location);
-
-void situateSite(short direction, Site location);
-
-Site *moveNorthOf(Site location);
-
-Site *moveSouthOf(Site location);
-
-Site *moveEastOf(Site location);
-
-Site *moveWestOf(Site location);
 
 /* Getters: */
 char *getSiteName(const Site site);

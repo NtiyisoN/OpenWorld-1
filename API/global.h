@@ -86,7 +86,7 @@ typedef unsigned short int bool
 #define VOLCANO 12
 #define ASTEROIDS 13
 
-/* Types of biomes: */
+/* Types of biomes (program generates 9 by default): */
 #define GRASS 0
 #define SAVANA 1
 #define DESERT 2
