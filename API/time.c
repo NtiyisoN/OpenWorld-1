@@ -3,11 +3,15 @@
  *
  * time.c 
  * created:	2019-06-06 
- * updated:	2019-06-11 
+ * updated:	2019-06-14 
  * 
  */
 
+#ifndef TIME_H
+#define TIME_H
+
 #include <stdlib.h>
+
 #include "time.h"
 #include "language.c"
 
@@ -178,42 +182,36 @@ char *getDateTime (const Calendar cal, char *format) {
 		} else if (strcmp(substr_4, 'YYYY')) {
 			sprintf(datetime, "%d", units[YEAR]);
 			format_cursor = format_cursor + 4;
-		} else if (strcmp(substr_4, 'YEAR')) {
-			sprintf(datetime, "%s", cal->calendar[YEAR][units[YEAR]]->name;
-			format_cursor = format_cursor + 4;
 		} else {
-			char substr_3[4];
-			memcpy(substr_3, substr_4, 3);
-			substr_3[3] = '\0';
+			char substr_2[3];
+			memcpy(substr_2, substr_3, 2);
+			substr_2[2] = '\0';
 
-			if (strcmp(substr_3, 'ERA')) {
+			if (strcmp(substr_2, 'DD')) {
+				sprintf(datetime, "%d", units[DAY]);
+				format_cursor = format_cursor + 2;
+			} else if (strcmp(substr_2, 'HH')) {
+				sprintf(datetime, "%d", units[HOUR]);
+				format_cursor = format_cursor + 2;
+			} else if (strcmp(substr_2, 'MM')) {
+				sprintf(datetime, "%d", units[DAY]);
+				format_cursor = format_cursor + 2;
+			} else if (strcmp(substr_2, 'MT')) {
+				sprintf(datetime, "%d", units[MONTH]); 
+				format_cursor = format_cursor + 2;
+			} else if (strcmp(substr_2, 'SS')) {
+				sprintf(datetime, "%d", units[DAY]);
+				format_cursor = format_cursor + 2;
+			} else if (strcmp(substr_2, 'YR')) {
+				sprintf(datetime, "%s", cal->calendar[YEAR][units[YEAR]]->name;
+				format_cursor = format_cursor + 2;
+			} else if (strcmp(substr_2, 'ER')) {
 				sprintf(datetime, "%s", cal->calendar[ERA][units[ERA]]->name);
 				format_cursor = format_cursor + 3;
 			} else {
-				char substr_2[3];
-				memcpy(substr_2, substr_3, 2);
-				substr_2[2] = '\0';
-
-				if (strcmp(substr_2, 'DD')) {
-					sprintf(datetime, "%d", units[DAY]);
-					format_cursor = format_cursor + 2;
-				} else if (strcmp(substr_2, 'HH')) {
-					sprintf(datetime, "%d", units[HOUR]);
-					format_cursor = format_cursor + 2;
-				} else if (strcmp(substr_2, 'MM')) {
-					sprintf(datetime, "%d", units[DAY]);
-					format_cursor = format_cursor + 2;
-				} else if (strcmp(substr_2, 'MT')) {
-					sprintf(datetime, "%d", units[MONTH]); 
-					format_cursor = format_cursor + 2;
-				} else if (strcmp(substr_2, 'SS')) {
-					sprintf(datetime, "%d", units[DAY]);
-					format_cursor = format_cursor + 2;
-				} else {
-					printf(datetime, *format_cursor);
-					format_cursor++;
-					break;
-				}
+				printf(datetime, *format_cursor);
+				format_cursor++;
+				break;
 			}
 		}
 	}
@@ -233,3 +231,5 @@ short dateTimeIsBefore (Calendar cal, long long datetime) {
 short dateTimeIsAfter (Calendar cal, long long datetime) {
 	return datetime < cal->current_datetime;
 }
+
+#endif /* TIME_H */

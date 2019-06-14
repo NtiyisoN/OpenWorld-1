@@ -7,7 +7,7 @@
  * 
  */
 
-#include "Dictionary.c"
+#include "dictionary.c"
 
 /* Default array size for language name, number of syllables, number of word initial and final syllables (any elements not used will be 0) */
 #define WORD_SIZE 16

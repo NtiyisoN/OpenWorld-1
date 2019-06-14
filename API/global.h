@@ -13,7 +13,7 @@
 
 /* Global: */
 
-typedef unsigned short int bool
+typedef unsigned short int bool;
 
 #define FALSE 0
 #define TRUE 1

@@ -3,7 +3,7 @@
  *
  * time.h 
  * created:	2019-06-06 
- * updated:	2019-06-11 
+ * updated:	2019-06-14 
  * 
  */
 
@@ -27,13 +27,14 @@
 #define DD 0
 #define MM 1
 #define YYYY 2
-#define YEAR 3
+#define YR 3
 #define MNTH 4
-#define ERA 5
+#define ER 5
 #define HH 6
 #define MT 7
 #define SS 8
-#define TIME 9
+#define TIME 9:61
+
 #define DATE 10
 
 //Struct for a unit of time
@@ -46,8 +47,8 @@ typedef struct unit {
 	long long count;
 
 	//next and previous units in the chain (so, for example, link this month to the next and previous months.
-	Unit *next;
-	Unit *prev;
+	void *next;
+	void *prev;
 	
 	//Number of these units to make up the next highest unit
 	int units_in_higher_unit;
@@ -85,7 +86,7 @@ void setDateTimeRandomly (Calendar cal);
 char *getDateTime (const Calendar cal, char *format);
 
 //Return the current time as an int counter in seconds from 
-long long *getDateTimeAsCounter (Calanedar cal);
+long long *getDateTimeAsCounter (Calendar cal);
 
 //Boolean: is the current time before the specified time?
 short dateTimeIsBefore (Calendar cal, long long datetime);
