@@ -18,8 +18,8 @@ static char *consonants[] = {
 		"v","w","x","y","z"
 	};
 
-Language makeRandomLanguage() {
-	Language new_lang = malloc(sizeof(Language));
+Language *makeRandomLanguage() {
+	Language *new_lang = malloc(sizeof(Language));
 
 	new_lang->max_syllables_per_word = rand() % 5 + 5;
 
@@ -38,10 +38,12 @@ Language makeRandomLanguage() {
 	new_lang->name = makeWord(new_lang);
 
 	Dictionary *dictionary[HASHSIZE];
+
+	return new_lang;
 }
 
-Language makeLanguageCalled(char *name) {
-	Language new_lang = makeRandomLanguage();
+Language *makeLanguageCalled(char *name) {
+	Language *new_lang = makeRandomLanguage();
 	new_lang->name = name;
 
 	return new_lang;

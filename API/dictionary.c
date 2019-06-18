@@ -1,6 +1,6 @@
 /* This is an implementation of the Table Lookup from section 6.6 of Kernighan and Ritchie's "The C Programming Language," 2nd edition, 1978 */
 
-typdef struct nlist { /* table entry: */
+typedef struct nlist { /* table entry: */
     struct nlist *next; /* next entry in chain */
     char *name; /* defined name */
     char *defn; /* replacement text */

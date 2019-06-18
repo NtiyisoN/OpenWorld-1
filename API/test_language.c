@@ -61,7 +61,7 @@ int main () {
 	//confirm make language called works
 	Language *blakeish = makeLanguageCalled("Blakeish");
 	puts ("Made a new language called (should say Blakeish): ");
-	puts (getNameOfLanguage(blakeish);
+	puts (getNameOfLanguage(blakeish));
 
 	return 0;
 }
@@ -69,7 +69,7 @@ int main () {
 int getNumberOfEntries(Language *lang) {
 
 	int number_of_entries = 0;
-	for (dict = lang->dictionary[0]; dict != NULL; dict = dict->next) {
+	for (Dictionary *dict = lang->dictionary[0]; dict != NULL; dict = dict->next) {
 		number_of_entries++;
 	}
 	return number_of_entries;
