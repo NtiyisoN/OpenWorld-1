@@ -1,18 +1,19 @@
 #include "time.h"
 #include "time.c"
+#include <stdio.h>
 
 int main() {
 
-	Calendar random_calendar = loadRandomCalendar();
+	Calendar random_calendar = makeRandomCalendar();
 
 	//should be 0000-00-00
-	char *date_time = getDatetime("YYYY-MM-DD");
+	char *date_time = getDateTime("YYYY-MM-DD");
 	
 	puts(date_time);
 
 	setDateTimeRandomly(random_calendar);
 
-	TIME_COUNT date_time_counter = parseDateTime(random_calendar);
+	TIME_COUNT date_time_counter = getDateTimeAsCounter(random_calendar);
 
 	if(dateTimeIsBefore(random_calendar, 0)) {
 					puts("Fail! random time is earlier than the dawn of time!");
@@ -20,15 +21,15 @@ int main() {
 
 	TIME_COUNT date_time_old_counter = date_time_counter;
 
-	advance(random_calendar, YEAR);
+	advanceTime(random_calendar, YEAR);
 
 	if(dateTimeIsAfter(random_calendar, date_time_old_counter)){
 					puts("Fail! advance (or associated checks) isn't working");
 	}
 
-	rewind(random_calendar, YEAR);
+	rewindTime(random_calendar, YEAR);
 
-	if(parseDateTime(random_calendar) != date_time_old_counter) {
+	if(getDateTimeAsCounter(random_calendar) != date_time_old_counter) {
 			puts("Fail! rewind isn't working.");
 	}
 

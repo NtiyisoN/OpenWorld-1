@@ -37,6 +37,8 @@
 
 #define DATE 10
 
+typedef long long TIME_COUNT;
+
 //Struct for a unit of time
 typedef struct unit {
 	char name[NAME_SIZE];
@@ -74,10 +76,10 @@ Calendar *makeRandomCalendar();
 void destroyCalendar(Calendar cal);
 
 //Advance a unit of time
-void advance (Calendar cal, int unit);
+void advanceTime (Calendar cal, int unit);
 
 //Rewind a unit of time
-void rewind (Calendar cal, int unit);
+void rewindTime (Calendar cal, int unit);
 
 //Set the current time randomly
 void setDateTimeRandomly (Calendar cal);

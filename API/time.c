@@ -3,7 +3,7 @@
  *
  * time.c 
  * created:	2019-06-06 
- * updated:	2019-06-14 
+ * updated:	2019-06-19 
  * 
  */
 
@@ -129,12 +129,12 @@ void destroyCalendar(Calendar cal) {
 	free(cal);
 }
 
-void advance(Calendar cal, int unit) {
+void advanceTime (Calendar cal, int unit) {
 	cal->current_datetime = 
 			cal->current_datetime + cal->calendar[unit]->count_in_ms;
 }
 
-void rewind (Calendar cal, int unit) {
+void rewindTime (Calendar cal, int unit) {
 	//Note: there cannot be negative time, if the unit to be rewound is greater than the amount of elapsed time, time will reset to 0.
 	if (cal->calendar[unit]->count_in_ms > cal->current_datetime) {
 		cal->current_datetime = 0;
@@ -209,27 +209,44 @@ char *getDateTime (const Calendar cal, char *format) {
 				sprintf(datetime, "%s", cal->calendar[ERA][units[ERA]]->name);
 				format_cursor = format_cursor + 3;
 			} else {
-				printf(datetime, *format_cursor);
+				sprintf(datetime, *format_cursor);
 				format_cursor++;
 				break;
 			}
 		}
 	}
 
-	return dateTime;
+	return datetime;
 }
 
 long long getDateTimeAsCounter (Calendar cal) {
-		return cal->current_datetime;
+	if (cal->current_datetime) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+    return -1
 }
 
 short dateTimeIsBefore (Calendar cal, long long datetime) {
-	return cal->current_datetime < datetime;
+	if (cal->current_datetime < datetime) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+    return -1;
 }
 
 
 short dateTimeIsAfter (Calendar cal, long long datetime) {
-	return datetime < cal->current_datetime;
+    if (datetime < cal->current_datetime) {
+        return 1;
+    } else {
+        return 0;
+    }
+    return -1;
 }
 
 #endif /* TIME_H */
