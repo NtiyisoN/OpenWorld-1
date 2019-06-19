@@ -1,5 +1,7 @@
 /* This is an implementation of the Table Lookup from section 6.6 of Kernighan and Ritchie's "The C Programming Language," 2nd edition, 1978 */
 
+#include <string.h>
+
 typedef struct nlist { /* table entry: */
     struct nlist *next; /* next entry in chain */
     char *name; /* defined name */
@@ -29,7 +31,6 @@ struct nlist *lookup(char *s)
     return NULL; /* not found */
 }
 
-char *strdup(char *);
 /* install: put (name, defn) in hashtab */
 struct nlist *install(char *name, char *defn)
 {
@@ -47,13 +48,4 @@ struct nlist *install(char *name, char *defn)
     if ((np->defn = strdup(defn)) == NULL)
        return NULL;
     return np;
-}
-
-char *strdup(char *s) /* make a duplicate of s */
-{
-    char *p;
-    p = (char *) malloc(strlen(s)+1); /* +1 for ’\0’ */
-    if (p != NULL)
-       strcpy(p, s);
-    return p;
 }

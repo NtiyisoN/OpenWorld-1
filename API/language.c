@@ -3,11 +3,12 @@
  *
  * language.c 
  * created:	2019-05-10 
- * updated:	2019-06-05 
+ * updated:	2019-06-19 
  * 
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include "global.h"
 #include "language.h"
 
@@ -35,23 +36,25 @@ Language *makeRandomLanguage() {
 		new_lang->syllables_wordfinal[i] = new_lang->syllables[rand() % NUMBER_SYLLABLES];
 	}
 
-	new_lang->name = makeWord(new_lang);
+	strcpy(new_lang->name, makeWord(new_lang));
 
-	Dictionary *dictionary[HASHSIZE];
-
+	//TODO: implement Dictionary and assign it to new_lang->dictionary
+	
 	return new_lang;
 }
 
 Language *makeLanguageCalled(char *name) {
 	Language *new_lang = makeRandomLanguage();
-	new_lang->name = name;
+	strcpy(new_lang->name, name);
 
 	return new_lang;
 }
 
-Language loadLanguage() {
+Language *loadLanguage() {
 	//TODO: pending database setup
 	//TODO: see below
+	Language *new = NULL;
+	return new;
 }
 
 void saveLanguage(Language *lang) {
@@ -81,7 +84,7 @@ char *getSyllable() {
 		onset_nucleus_coda_length[1] +
 		onset_nucleus_coda_length[2];
 
-	char *syllable = malloc(sizeof(char*) * (chars_in_syllable + 1));
+	char *syllable = calloc(chars_in_syllable, sizeof(char));
 
 	int cursor = 0;
 	
@@ -137,21 +140,24 @@ char *getMarker() {
 }
 
 char *makeWord(Language *lang) {
-	int syllables_in_word = (rand() % new_lang->max_syllables_per_word) + 1;
+	int syllables_in_word = (rand() % lang->max_syllables_per_word) + 1;
 
 	char *new_word = calloc(MAX_CHARS_IN_NAME, sizeof(char));
+	char *cursor = new_word;
 	int cursor_count = 0;
 
 	for (int i = 0; i < syllables_in_word; i++) {
 		if (cursor_count < MAX_CHARS_IN_NAME) {
-			new_word = getSyllable();
-			while (*new_word != '\0') {
-				new_word++;
+			strcpy(cursor, getSyllable());
+			while (*cursor != '\0') {
+				cursor++;
 				cursor_count++;
 				if (cursor_count == MAX_CHARS_IN_NAME) {
 					break;
 				}
 			}
+		} else {
+			break;
 		}
 	}
 
@@ -164,19 +170,19 @@ char *getNameOfLanguage(Language *lang) {
 
 int isMutuallyIntelligibleWith(char *other_language) {
 	//TODO: Figure out how to calculate this
+	return -1;
 }
 
 char *translateInto(Language *lang, char *source) {
 	//TODO: Allow for looking up words to see if they already exist (ie., load source word into fixed space, use it for dictionary lookup
 	//TODO: Strip punctuation, ignore case (might need pareser lib)
-	char *translation;
+	char *translation = NULL;
 	int non_whitespace = 0;
 
-	char *cursor_source = source;
 	char *cursor_translation = translation;
 	
-	for (cursor; cursor != '\0'; cursor++) {
-		if (non_whitespace && *cursor = ' ') {
+	for (char *cursor_source = source; *cursor_source != '\0'; cursor_source++) {
+		if (non_whitespace && *cursor_source == ' ') {
 			cursor_translation = makeWord(lang);
 			
 			while (*cursor_translation != '\0') {
@@ -202,10 +208,10 @@ int changeName(Language *lang, char *new_name) {
 	}
 
 	if (count > WORD_SIZE) {
-		fprintf(stderr, "%s", "Suggested name is too long! Name must be under %d characters", WORD_SIZE);
+		fprintf(stderr, "Suggested name is too long! Name must be under %d characters", WORD_SIZE);
 		return -1;
 	} else {
-		lang->name = new_name;
+		strcpy(lang->name, new_name);
 		return 0;
 	}
 }
