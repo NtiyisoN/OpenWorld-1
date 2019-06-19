@@ -18,7 +18,7 @@ typedef unsigned short int bool;
 #define FALSE 0
 #define TRUE 1
 
-#define MAX_CHARS_FOR_DESCRIPTION 2048
+#define MAX_CHARS_IN_DESCRIPTION 2048
 #define FILENAME_MAX_LENGTH 32
 #define MAX_CHARS_IN_NAME 32
 

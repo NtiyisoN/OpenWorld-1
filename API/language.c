@@ -176,14 +176,14 @@ int isMutuallyIntelligibleWith(char *other_language) {
 char *translateInto(Language *lang, char *source) {
 	//TODO: Allow for looking up words to see if they already exist (ie., load source word into fixed space, use it for dictionary lookup
 	//TODO: Strip punctuation, ignore case (might need pareser lib)
-	char *translation = NULL;
-	int non_whitespace = 0;
+	char *translation = calloc(MAX_CHARS_IN_DESCRIPTION, sizeof(char));
+	int non_whitespace = 1;
 
 	char *cursor_translation = translation;
 	
 	for (char *cursor_source = source; *cursor_source != '\0'; cursor_source++) {
 		if (non_whitespace && *cursor_source == ' ') {
-			cursor_translation = makeWord(lang);
+			strcpy(cursor_translation, makeWord(lang));
 			
 			while (*cursor_translation != '\0') {
 				cursor_translation++;
@@ -194,7 +194,7 @@ char *translateInto(Language *lang, char *source) {
 				cursor_translation++;
 			}
 		} else {
-			non_whitespace = 1;
+			non_whitespace = 0;
 		}
 	}
 
