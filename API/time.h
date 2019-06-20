@@ -3,7 +3,7 @@
  *
  * time.h 
  * created:	2019-06-06 
- * updated:	2019-06-14 
+ * updated:	2019-06-20 
  * 
  */
 
@@ -73,25 +73,25 @@ Calendar *makeCalendarFromFile(char[FILENAME_MAX_LENGTH]);
 Calendar *makeRandomCalendar();
 
 //Free a calendar.
-void destroyCalendar(Calendar cal);
+void freeCalendar(Calendar *cal);
 
 //Advance a unit of time
-void advanceTime (Calendar cal, int unit);
+void advanceTime (Calendar *cal, int unit);
 
 //Rewind a unit of time
-void rewindTime (Calendar cal, int unit);
+void rewindTime (Calendar *cal, int unit);
 
 //Set the current time randomly
-void setDateTimeRandomly (Calendar cal);
+void setDateTimeRandomly (Calendar *cal);
 
 //Return the current time as a written statement
-char *getDateTime (const Calendar cal, char *format);
+char *getDateTime (const Calendar *cal, char *format);
 
 //Return the current time as an int counter in seconds from 
-long long *getDateTimeAsCounter (Calendar cal);
+long long getDateTimeAsCounter (Calendar *cal);
 
 //Boolean: is the current time before the specified time?
-short dateTimeIsBefore (Calendar cal, long long datetime);
+short dateTimeIsBefore (Calendar *cal, long long datetime);
 
 //Boolean: is the current time after the specified time?
-short dateTimeIsAfter (Calendar cal, long long datetime);
+short dateTimeIsAfter (Calendar *cal, long long datetime);

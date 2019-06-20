@@ -3,7 +3,7 @@
  *
  * time.c 
  * created:	2019-06-06 
- * updated:	2019-06-19 
+ * updated:	2019-06-20 
  * 
  */
 
@@ -11,6 +11,7 @@
 #define TIME_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "time.h"
 #include "language.c"
@@ -25,19 +26,16 @@ Calendar *makeRandomCalendar() {
 
 	//Generate a language to make the names of the units from. TODO: Find a way to check for existing languages and use one of them, if available.
 	Language *lang = makeRandomLanguage();
-	for (int i = 0; i < NUMBER UNITS; i++) {
-		cal->calendar[i] = malloc(sizeof(Unit));
+	for (int i = 0; i < NUMBER_UNITS; i++) {
+		cal->calendar[i] = calloc(1, sizeof(Unit));
 
 		if (i < 5) {
-			cal->calendar[i]->hasName = 0;
-			cal->calendar[i]->name = '\0';
-
 			cal->calendar[i]->hasCount = 1;
 			cal->calendar[i]->count = 0;
 
 		} else {
 			cal->calendar[i]->hasName = 1;
-			cal->calendar[i]->name = makeWord(lang, NAME_SIZE);
+			strcpy(cal->calendar[i]->name, makeWord(lang));
 			
 			cal->calendar[i]->hasCount = 0;
 			cal->calendar[i]->count = 0;
@@ -97,15 +95,15 @@ Calendar *makeRandomCalendar() {
 	//Now, link the named units together in an array
 	for (int i = MONTH; i < NUMBER_UNITS; i++) {
 		int count = 1;
-		Unit previous_unit = cal->calendar[i];
+		Unit *previous_unit = cal->calendar[i];
 		while (count < cal->calendar[i]->units_in_higher_unit) {
 			Unit *next = malloc(sizeof(Unit));
-			next->name = makeWord(lang, NAME_SIZE);
-			name->hasName = 1;
+			strcpy(next->name, makeWord(lang));
+			next->hasName = 1;
 			if (cal->calendar[i]->hasCount) {
-				hasCount = 1;
+				cal->calendar[i]->hasCount = 1;
 			} else { 
-				hasCount = 2; 
+				cal->calendar[i]->hasCount = 2; 
 			}
 
 			next->prev = previous_unit;
@@ -125,16 +123,15 @@ Calendar *makeRandomCalendar() {
 	return cal;
 }
 
-void destroyCalendar(Calendar cal) {
+void destroyCalendar(Calendar *cal) {
 	free(cal);
 }
 
-void advanceTime (Calendar cal, int unit) {
-	cal->current_datetime = 
-			cal->current_datetime + cal->calendar[unit]->count_in_ms;
+void advanceTime (Calendar *cal, int unit) {
+	cal->current_datetime = cal->current_datetime + cal->calendar[unit]->count_in_ms;
 }
 
-void rewindTime (Calendar cal, int unit) {
+void rewindTime (Calendar *cal, int unit) {
 	//Note: there cannot be negative time, if the unit to be rewound is greater than the amount of elapsed time, time will reset to 0.
 	if (cal->calendar[unit]->count_in_ms > cal->current_datetime) {
 		cal->current_datetime = 0;
@@ -144,12 +141,12 @@ void rewindTime (Calendar cal, int unit) {
 	}
 }
 
-void setDateTimeRandomly (Calendar cal) {
+void setDateTimeRandomly (Calendar *cal) {
 	cal->current_datetime = rand() % (NUMBER_OF_HISTORICAL_ERAS * YEARS_PER_HISTORICAL_ERA * cal->calendar[YEAR]->count_in_ms);
 }
 
-char *getDateTime (const Calendar cal, char *format) {
-	char dateTime[MAX_CHARS_FOR_DESCRIPTION] = calloc(MAX_CHARS_FOR_DESCRIPTION, sizeof(char));
+char *getDateTime (const Calendar *cal, char *format) {
+	char *datetime = calloc(MAX_CHARS_IN_DESCRIPTION, sizeof(char));
 	int units[NUMBER_UNITS];
 	
 	long long remaining = cal->current_datetime;
@@ -170,46 +167,46 @@ char *getDateTime (const Calendar cal, char *format) {
 		memcpy(substr_4, format_cursor, 4);
 		substr_4[4] = '\0';
 
-		if (strcmp(substr_4, 'DATE') == 0) {
+		if (strcmp(substr_4, "DATE") == 0) {
 			sprintf(datetime, "%d-%d-%d", units[YEAR], units[DAY], units[MONTH]); 
 			format_cursor = format_cursor + 4;
-		} else if (strcmp(substr_4, 'MNTH')) {
-			sprintf(datetime, "%s", cal->calendar[MONTH][units[MONTH]]->NAME);
+		} else if (strcmp(substr_4, "MNTH")) {
+			sprintf(datetime, "%s", cal->calendar[MONTH][units[MONTH]].name);
 			format_cursor = format_cursor + 4;
-		} else if (strcmp(substr_4, 'TIME')) {
-			sprintf(datetime, "%d:%d", units[HOUR], units[MINUTE];
+		} else if (strcmp(substr_4, "TIME")) {
+			sprintf(datetime, "%d:%d", units[HOUR], units[MINUTE]);
 			format_cursor = format_cursor + 4;
-		} else if (strcmp(substr_4, 'YYYY')) {
+		} else if (strcmp(substr_4, "YYYY")) {
 			sprintf(datetime, "%d", units[YEAR]);
 			format_cursor = format_cursor + 4;
 		} else {
 			char substr_2[3];
-			memcpy(substr_2, substr_3, 2);
+			memcpy(substr_2, substr_4, 2);
 			substr_2[2] = '\0';
 
-			if (strcmp(substr_2, 'DD')) {
+			if (strcmp(substr_2, "DD")) {
 				sprintf(datetime, "%d", units[DAY]);
 				format_cursor = format_cursor + 2;
-			} else if (strcmp(substr_2, 'HH')) {
+			} else if (strcmp(substr_2, "HH")) {
 				sprintf(datetime, "%d", units[HOUR]);
 				format_cursor = format_cursor + 2;
-			} else if (strcmp(substr_2, 'MM')) {
+			} else if (strcmp(substr_2, "MM")) {
 				sprintf(datetime, "%d", units[DAY]);
 				format_cursor = format_cursor + 2;
-			} else if (strcmp(substr_2, 'MT')) {
+			} else if (strcmp(substr_2, "MT")) {
 				sprintf(datetime, "%d", units[MONTH]); 
 				format_cursor = format_cursor + 2;
-			} else if (strcmp(substr_2, 'SS')) {
+			} else if (strcmp(substr_2, "SS")) {
 				sprintf(datetime, "%d", units[DAY]);
 				format_cursor = format_cursor + 2;
-			} else if (strcmp(substr_2, 'YR')) {
-				sprintf(datetime, "%s", cal->calendar[YEAR][units[YEAR]]->name;
+			} else if (strcmp(substr_2, "YR")) {
+				sprintf(datetime, "%s", cal->calendar[YEAR][units[YEAR]].name);
 				format_cursor = format_cursor + 2;
-			} else if (strcmp(substr_2, 'ER')) {
-				sprintf(datetime, "%s", cal->calendar[ERA][units[ERA]]->name);
+			} else if (strcmp(substr_2, "ER")) {
+				sprintf(datetime, "%s", cal->calendar[ERA][units[ERA]].name);
 				format_cursor = format_cursor + 3;
 			} else {
-				sprintf(datetime, *format_cursor);
+				sprintf(datetime, "%c", *format_cursor);
 				format_cursor++;
 				break;
 			}
@@ -219,17 +216,11 @@ char *getDateTime (const Calendar cal, char *format) {
 	return datetime;
 }
 
-long long getDateTimeAsCounter (Calendar cal) {
-	if (cal->current_datetime) {
-        return 1;
-    } else {
-        return 0;
-    }
-
-    return -1
+long long getDateTimeAsCounter (Calendar *cal) {
+	return cal->current_datetime;
 }
 
-short dateTimeIsBefore (Calendar cal, long long datetime) {
+short dateTimeIsBefore (Calendar *cal, long long datetime) {
 	if (cal->current_datetime < datetime) {
         return 1;
     } else {
@@ -240,7 +231,7 @@ short dateTimeIsBefore (Calendar cal, long long datetime) {
 }
 
 
-short dateTimeIsAfter (Calendar cal, long long datetime) {
+short dateTimeIsAfter (Calendar *cal, long long datetime) {
     if (datetime < cal->current_datetime) {
         return 1;
     } else {

@@ -1,13 +1,12 @@
-#include "time.h"
 #include "time.c"
 #include <stdio.h>
 
 int main() {
 
-	Calendar random_calendar = makeRandomCalendar();
+	Calendar *random_calendar = makeRandomCalendar();
 
 	//should be 0000-00-00
-	char *date_time = getDateTime("YYYY-MM-DD");
+	char *date_time = getDateTime(random_calendar, "YYYY-MM-DD");
 	
 	puts(date_time);
 
