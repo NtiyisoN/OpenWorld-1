@@ -3,12 +3,13 @@
  *
  * space.h 
  * created:	2019-06-11 
- * updated:	2019-06-13 
+ * updated:	2019-06-21 
  * 
  */
 
 #include "global.h"
 #include "creature.c"
+#include "language.c"
 
 /* Definitions: */
 
@@ -17,7 +18,11 @@
 #define INTERIOR 1
 
 /* Structs: */
-typedef struct site {
+typedef struct site Site;
+typedef struct map Map;
+
+
+struct site {
 	bool has_name;
 	char name[MAX_CHARS_IN_NAME];
 	
@@ -39,24 +44,24 @@ typedef struct site {
 
 	bool exterior_or_interior;
 
-	Site neighbor[4];
+	Site *neighbor[4];
 
 	Map *location;
 	Map *map;
 
 	Language *language;
-} Site;
+};
 
-typedef struct map {
+struct map {
 	Site *of;
 	Site *capital;
-} map;
+};
 
 //
 //functions
-Site *makeSpaceFromFile(FILE filename[FILENAME_MAX_LENGTH]);
+// Site *makeSpaceFromFile(FILE filename[FILENAME_MAX_LENGTH]);
 
-Site *makeSpaceWithContext(OpenWorld world);
+// Site *makeSpaceWithContext(OpenWorld world);
 
 /* Note: making Space randomly will generate an entire universe, world and series of locations all without owners or cultural attachment. This will work well for some general cases, but space is better made in context */
 
@@ -66,34 +71,40 @@ Site *makeRandomSite();
 
 Site *makeSiteOfType(short type);
 
-void moveSiteTo(Site location);
+Map *makeMap(Site *site);
+
+void defineMap (Map *map);
+
+void fillMap(Site *sitevisitor, int sites_remaining);
+
+void moveSiteTo(Site *location, Site *destination);
 
 /* Getters: */
-char *getSiteName(const Site site);
+char *getSiteName(Site *site);
 
-short getSiteType(const Site site);
+short getSiteType(const Site *site);
 
-short getSiteClimate(const Site site);
+short getSiteClimate(const Site *site);
 
-Creature *getSiteOwner(const Site site);
+Creature *getSiteOwner(const Site *site);
 
-Creature *getSiteGovernor(const Site site);
+Creature *getSiteGovernor(const Site *site);
 
-Site *getSiteNorthOf(const Site site);
+Site *getSiteNorthOf(Site *site);
 
-Site *getSiteSouthOf(const Site site);
+Site *getSiteSouthOf(Site *site);
 
-Site *getSiteWestOf(const Site site);
+Site *getSiteWestOf(Site *site);
 
-Site *getSiteEastOf(const Site site);
+Site *getSiteEastOf(Site *site);
 
 /* Setters: */
-void setSiteName(Site site, char name[MAX_CHARS_IN_NAME]);
+void setSiteName(Site *site, char name[MAX_CHARS_IN_NAME]);
 
-void setSiteType(Site site, short type);
+void setSiteType(Site *site, short type);
 
-void setSiteClimate(Site site, short climate);
+void setSiteClimate(Site *site, short climate);
 
-void setSiteOwner(Site site, Creature *owner);
+void setSiteOwner(Site *site, Creature *owner);
 
-void setSiteGovernor(Site site, Creature *governor);
+void setSiteGovernor(Site *site, Creature *governor);

@@ -3,30 +3,34 @@
  *
  * space.c 
  * created:	2019-06-12 
- * updated:	2019-06-13 
+ * updated:	2019-06-21 
  * 
  */
 
-#include "space.c"
-#include "language.c"
+#include "space.h"
+#include "global.h"
 
 Site *makeSpaceFromFile(FILE filename[FILENAME_MAX_LENGTH]) {
 	//TODO
 	return malloc(sizeof(Site));
 }
 
-Site *makeSpaceFromContext(World world) {
+//Site *makeSpaceFromContext(World world) {
 	//TODO: pending API, world objects
-	return malloc(sizeof(Site));
-}
+//	return malloc(sizeof(Site));
+//}
 
 Site *makeRandomSpace() {
-	Space *space = calloc(1, sizeof(Space));
+	Site *space = calloc(1, sizeof(Site));
 
 	space->language = makeRandomLanguage();
 
 	space->has_name = TRUE;
-	space->name = makeWord(lang);
+	
+	char *name = makeWord(space->language);
+	strcpy(space->name, name);
+
+	free(name);
 
 	space->has_type = TRUE;
 	space->type = 0;
@@ -46,16 +50,14 @@ Map *makeMap(Site *site) {
 }
 
 void defineMap(Map *map) {
-	short maptype = map->of_site->type;
-	Language *lang = map->of_site->language;
-	int total_sites;
-	Site *capital = makeSiteOfType(maptype)
-
-	Site sitevisitor = capital;
-	fillSpace(capital, total_sites);
+	short maptype = map->of->type;
+	int total_sites = 0;
+	Site *capital = makeSiteOfType(maptype);
+	capital->language = map->of->language;
+	fillMap(capital, total_sites);
 }
 
-void fillMap(Site sitevisitor, int sites_remaining) {
+void fillMap(Site *sitevisitor, int sites_remaining) {
 	//TODO: some types of maps are spherical... connecting north to south, east to west and vice v. (under the right circumstances) should happen here
 	if (sites_remaining > 0) {
 		if (sitevisitor != NULL) {
@@ -63,8 +65,8 @@ void fillMap(Site sitevisitor, int sites_remaining) {
 			for (int i = 0; i < neighbors; i++) {
 				sitevisitor->neighbor[i] = calloc(1, sizeof(Site));
 				memcpy (sitevisitor->neighbor[i], sitevisitor, sizeof(Site));
-				sitevisitor->neighbor[i]->name = makeWord(sitevisitor->language);
-				fillSpace(sitevisitor->neighbor[i], (sites_remaining / neighbors));
+				strcpy(sitevisitor->neighbor[i]->name, makeWord(sitevisitor->language));
+				fillMap(sitevisitor->neighbor[i], (sites_remaining / neighbors));
 			}
 
 		}
@@ -74,7 +76,7 @@ void fillMap(Site sitevisitor, int sites_remaining) {
 }
 
 Site *makeRandomSite() {
-	Site *site = makeSiteOfType(rand() % 9;
+	Site *site = makeSiteOfType(rand() % 9);
 
 	return site;
 }
@@ -82,38 +84,39 @@ Site *makeRandomSite() {
 Site *makeSiteOfType(short type) {
 	
 	Site *capital;
+	int total_sites;
 
 	if (type == UNIVERSE) {
 		capital = makeRandomSpace();
 	} else {
 		capital = calloc(1, sizeof(Site));
 
-		capital->location = map;
-		capital->language = lang;
+		capital->location = makeMap(capital);
+		capital->language = makeRandomLanguage();
 
-		if (maptype == UNIVERSE) {
+		if (type == UNIVERSE) {
 			total_sites = GALAXIES_IN_UNIVERSE;
 			
 			capital->has_name = TRUE;
-			capital->name = makeWord(lang);
+			strcpy(capital->name, makeWord(capital->language));
 	
 			capital->has_type = TRUE;
 			capital->type = GALAXY;
 
-		} else if (maptype == GALAXY) {
+		} else if (type == GALAXY) {
 			total_sites = SYSTEMS_IN_GALAXY;
 		
 			capital->has_name = TRUE;
-			capital->name = makeWord(lang);
+			strcpy(capital->name, makeWord(capital->language));
 
 			capital->has_type = TRUE;
 			capital->type = SYSTEM;
 
-		} else if (maptype == SYSTEM) {
+		} else if (type == SYSTEM) {
 			total_sites = PLANETS_PER_SYSTEM;
 		
 			capital->has_name = TRUE;
-			capital->name = makeWord(lang);
+			strcpy(capital->name, makeWord(capital->language));
 	
 			capital->has_type = TRUE;
 			capital->type = PLANET;
@@ -121,28 +124,23 @@ Site *makeSiteOfType(short type) {
 			capital->has_climate = TRUE;
 			capital->climate = (rand() % 9);
 	
-		} else if (maptype == PLANET) {
+		} else if (type == PLANET) {
 			total_sites = REGIONS_PER_PLANET;
 			
 			capital->has_name = TRUE;
-			capital->name = makeWord(lang);
+			strcpy(capital->name, makeWord(capital->language));
 	
 			capital->has_type = TRUE;
 			capital->type = REGION;
 	
 			capital->has_climate = TRUE;
-			int chance = rand() % 10;
-			if (chance < 7) {
-				capital->climate = map->of_site->climate;
-			} else {
-				capital->climate = (rand() % 9);
-			}
+			capital->climate = (rand() % 9);
 	
-		} else if (maptype == REGION) {
+		} else if (type == REGION) {
 			total_sites = COUNTRIES_PER_REGION;
 		
 			capital->has_name = TRUE;
-			capital->name = makeWord(lang);
+			strcpy(capital->name, makeWord(capital->language));
 	
 			capital->has_type = TRUE;
 			capital->type = COUNTRY;
@@ -150,11 +148,11 @@ Site *makeSiteOfType(short type) {
 			capital->has_climate = TRUE;
 			capital->inherits_climate_from_parent = TRUE;
 	
-		} else if (maptype == COUNTRY) {
+		} else if (type == COUNTRY) {
 			total_sites = SETTLEMENTS_PER_COUNTRY;
 		
 			capital->has_name = TRUE;
-			capital->name = makeWord(lang);
+			strcpy(capital->name, makeWord(capital->language));
 	
 			capital->has_type = TRUE;
 			capital->type = SETTLEMENT;
@@ -162,7 +160,7 @@ Site *makeSiteOfType(short type) {
 			capital->has_climate = TRUE;
 			capital->inherits_climate_from_parent = TRUE;
 	
-		} else if (maptype == SETTLEMENT) {
+		} else if (type == SETTLEMENT) {
 			total_sites = STRUCTURES_PER_SETTLEMENT;
 		
 			//TODO: types of structures? Instead of specific names?
@@ -171,7 +169,7 @@ Site *makeSiteOfType(short type) {
 	
 			capital->exterior_or_interior = INTERIOR;
 	
-		} else if (maptype == STRUCTURE) {
+		} else if (type == STRUCTURE) {
 			total_sites = ROOMS_PER_STRUCTURE;
 	
 			capital->has_type = TRUE;
@@ -183,9 +181,9 @@ Site *makeSiteOfType(short type) {
 		
 		}
 		
-		map->capital = capital;
+		capital->map = makeMap(capital);
 
-		if (maptype < 8) {
+		if (type < 8) {
 			capital->map = makeMap(capital);
 			defineMap(capital->map);
 		}
@@ -199,7 +197,7 @@ void moveSiteTo(Site *site, Site *destination) {
 
 	while (sitevisitor != NULL) {
 		int i = 0;
-		for (i; i < 4; i++) {
+		for ( ; i < 4; i++) {
 			if (sitevisitor->neighbor[i] == NULL) {
 				sitevisitor = sitevisitor->neighbor[i];
 				break;
@@ -213,15 +211,15 @@ void moveSiteTo(Site *site, Site *destination) {
 }
 
 /* Getters: */
-char *getSiteName(const Site site) {
+char *getSiteName(Site *site) {
 	if (site->has_name) {
 		return site->name;
 	} else {
-		return '\0';
+		return NULL;
 	}
 }
 
-short getSiteType(const Site site) {
+short getSiteType(const Site *site) {
 	if (site->has_type) {
 		return site->type;
 	} else {
@@ -229,7 +227,7 @@ short getSiteType(const Site site) {
 	}
 }
 
-short getSiteClimate(const Site site) {
+short getSiteClimate(const Site *site) {
 	if (site->has_climate) {
 		return site->climate;
 	} else {
@@ -237,7 +235,7 @@ short getSiteClimate(const Site site) {
 	}
 }
 
-Creature *getSiteOwner(const Site site) {
+Creature *getSiteOwner(const Site *site) {
 	if (site->has_owner) {
 		return site->owner;
 	} else {
@@ -245,64 +243,68 @@ Creature *getSiteOwner(const Site site) {
 	}
 }
 
-Creature *getSiteGovernor(const Site site) {
-	if (site->has_governor) {
+Creature *getSiteGovernor(const Site *site) {
+	if (site->is_governed) { 
 		return site->governor;
 	} else {
 		return NULL;
 	}
 }
 
-Site *getSiteNorthOf(const Site site) {
-	if (location->neighbor[NORTH] != NULL) {
-		return location->neighbor[NORTH];
+Site *getSiteNorthOf(Site *site) {
+	if (site->neighbor[NORTH] != NULL) {
+		return site->neighbor[NORTH];
 	} else {
-		return location;
+		return site;
 	}
+}
 
-Site *getSiteSouthOf(const Site site) {
-	if (location->neighbor[SOUTH] != NULL) {
-		return location->neighbor[SOUTH];
+Site *getSiteSouthOf(Site *site) {
+	if (site->neighbor[SOUTH] != NULL) {
+		return site->neighbor[SOUTH];
 	} else {
-		return location;
+		return site;
 	}
+}
 
-Site *getSiteWestOf(const Site site) {
-	if (location->neighbor[WEST] != NULL) {
-		return location->neighbor[WEST];
+Site *getSiteWestOf(Site *site) {
+	if (site->neighbor[WEST] != NULL) {
+		return site->neighbor[WEST];
 	} else {
-		return location;
+		return site;
 	}
+}
 
-Site *getSiteEastOf(const Site site) {
-	if (location->neighbor[EAST] != NULL) {
-		return location->neighbor[EAST];
+Site *getSiteEastOf(Site *site) {
+	if (site->neighbor[EAST] != NULL) {
+		return site->neighbor[EAST];
 	} else {
-		return location;
+		return site;
 	}
+}
 
 /* Setters: */
-void setSiteName(Site site, char name[MAX_CHARS_IN_NAME]) {
-	site->name = name;
+void setSiteName(Site *site, char name[MAX_CHARS_IN_NAME]) {
+	strcpy(site->name, name);
 	site->has_name = TRUE;
 }
 
-void setSiteType(Site site, short type) {
+void setSiteType(Site *site, short type) {
 	site->type = type;
 	site->has_type = TRUE;
 }
 
-void setSiteClimate(Site site, short climate) {
+void setSiteClimate(Site *site, short climate) {
 	site->climate = climate;
 	site->has_climate = TRUE;
 }
 
-void setSiteOwner(Site site, Creature *owner) {
+void setSiteOwner(Site *site, Creature *owner) {
 	site->owner = owner;
 	site->has_owner = TRUE;
 }
 
-void setSiteGovernor(Site site, Creature *governor) {
+void setSiteGovernor(Site *site, Creature *governor) {
 	site->governor = governor;
-	site->has_governor = TRUE;
+	site->is_governed = TRUE;
 }
