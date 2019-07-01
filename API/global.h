@@ -96,3 +96,17 @@ typedef unsigned short int bool;
 #define SWAMP 6
 #define BEACH 7
 #define OCEAN 8
+
+/* ORGANIZATIONS: */
+/* Types of organizations: */
+#define RELIGIOUS 0
+#define POLITICAL 1
+#define FACTION 2
+#define GUILD 3
+#define FAMILY 4
+#define MILITARY 5
+#define INDUSTRIAL 6
+#define EDUCATIONAL 7
+
+/* Number of associations as association can have with other associations:*/
+#define MAX_ASSOCIATIONS 32
