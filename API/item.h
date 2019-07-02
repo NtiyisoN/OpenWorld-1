@@ -3,14 +3,14 @@
  *
  * item.h 
  * created:	2019-07-01
- * updated:	2019-06-01 
+ * updated:	2019-07-02 
  * 
  */
 
 #include "global.h"
 
 typedef struct item {
-	char *type;
+	bool has_type;
 	Item type_of;
 	
 	bool is_unique;
@@ -36,3 +36,23 @@ typedef struct item {
 
 	bool can_be_destroyed;
 } Item;
+
+/* GETTERS: */
+
+Item *getItemTypeOf(Item *item);
+
+Char *getProperNameOf(Item *item);
+
+Creature *getOwnerOf(Item *item);
+
+Organization *getOwnerOf(Item *item);
+
+/* SETTERS: */
+
+void setItemTypeOf(Item *item);
+
+void setProperNameOf(Item *item);
+
+void setOwnerOf(Item *item, Creature *owner);
+
+void setOwnerOf(Item *item, Organization *owner);

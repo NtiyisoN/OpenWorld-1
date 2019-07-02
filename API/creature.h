@@ -3,7 +3,7 @@
  *
  * creature.h 
  * created:	2019-06-21 
- * updated:	2019-06-21 
+ * updated:	2019-07-02 
  * 
  */
 
@@ -69,3 +69,55 @@ typedef struct creature {
 	/* TODO: still to come: inventory, levels for hunger/thirst etc./ways of tracking entites the creature is friendly/hostile toward */
 
 } Creature;
+
+/* GETTERS: */
+char *getSpeciesOf(Creature *creature);
+
+char *getProperNameOf(Creature *creature);
+
+char *getDescriptionOf(Creature *creature);
+
+bool movesInAir(Creature *creature);
+
+bool movesOnLand(Creature *creature);
+
+bool movesInWater(Creature *creature);
+
+int getHeightOf(Creature *creature);
+
+int getWeightOf(Creature *creature);
+
+int getCapacityOf(Creature *creature);
+
+int getHairColorOf(Creature *creature);
+
+int getEyeColorOf(Creature *creature);
+
+int getNumberOfLegsOf(Creature *creature);
+
+int getNumberOfArmsOf(Creature *creature);
+
+Creature *getEmployerOf(Creature *creature);
+
+Organization *getEmployerOf(Creature *creature);
+
+/* SETTERS: */
+void setSpeciesNameAs(Creature *creature, char *species_name);
+
+void setProperNameOf(Creature *creature, char *proper_name);
+
+void setDescriptionOf(Creature *creature, char *description);
+
+void setHeightOf(Creature *creature int height);
+
+void setWeightOf(Creature *creature int weight);
+
+void setCapacityOf(Creature *creature int capacity);
+
+void setHairColorOf(Creature *creature, int hair_color);
+
+void setEyeColorOf(Creature *creature, int eye_color);
+
+void setEmployerOf(Creature *creature, Creature *employer);
+
+void setEmployerOf(Creature *creature, Organization *employer);
