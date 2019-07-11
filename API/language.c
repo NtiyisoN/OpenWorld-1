@@ -51,7 +51,7 @@ Language *makeLanguageCalled(char *name) {
 	return new_lang;
 }
 
-Language *loadLanguage() {
+Language *loadLanguageFromFile() {
 	//TODO: pending database setup
 	//TODO: see below
 	Language *new = NULL;
@@ -140,7 +140,7 @@ char *getMarker() {
 	return marker;
 }
 
-char *makeWord(Language *lang) {
+char *makeRandomWord(Language *lang) {
 	int syllables_in_word = (rand() % lang->max_syllables_per_word) + 1;
 
 	char *new_word = calloc(MAX_CHARS_IN_NAME, sizeof(char));

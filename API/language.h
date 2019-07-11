@@ -3,7 +3,7 @@
  *
  * language.h 
  * created:	2019-05-10 
- * updated:	2019-06-19 
+ * updated:	2019-07-11 
  * 
  */
 
@@ -34,13 +34,13 @@ typedef struct language {
 } Language;
 
 /* Create new, completely random language */
-Language randomLanguage();
+Language *makeRandomLanguage();
 
 /* Create new language with a specific name */
 Language *makeLanguageCalled(char *name);
 
 /* Load a language from the database */
-Language *loadLanguage();
+Language *loadLanguageFromFile();
 
 /* Save a language to the database */
 void saveLanguage();
@@ -52,7 +52,7 @@ void freeLanguage(Language *lang);
 char *getSyllable();
 
 /* Make a word */
-char *makeWord(Language *lang);
+char *makeRandomWord(Language *lang);
 
 /* Similar to the getSyllable() function, this returns a short syllable (either a vowel or a single consonant onset with a vowel) to be used as a grammatical marker*/
 char *getMarker();
