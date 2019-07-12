@@ -1,5 +1,5 @@
 # OpenWorld
-OpenWorld is a software library for game designers that can generate and manage expansive, randomized settings for your game. Create an entire universe filled with planets, countries, civilizations, people, languages and objects… or create some (or just one) of any of these as needed and put them to use in your project!
+OpenWorld is a software library for game designers to generate and manage expansive, randomized settings for games. Create an entire universe filled with planets, countries, civilizations, people, languages and objects… or create some (or just one) of any of these as needed and put them to use in your project!
 
 ## Build status
 The first full "release" is currently slated for early 2020. Contact the author at contact@blake-cooper.com for updates, or with any questions.
